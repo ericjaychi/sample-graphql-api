@@ -1,0 +1,46 @@
+# Definition of what is in our schema. We have retrieval of data in the query and manipulation of data in mutations.
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+# Defining the Book model that our application will represent.
+# The ! means that it is a non-nullable, meaning that the field will always have a value.
+type Book {
+    id: ID!
+    title: String!
+    author: String!
+    isbn: String!
+}
+
+# A data model or object that acts as the response for our Book.
+# This is the structure of the response that the client should receive back.
+type BookResult {
+    success: Boolean!
+    errors: [String]
+    book: Book
+}
+
+# A data model or object that acts as the response for our Book but in list form.
+# This is the structure of the response that the client should receive back but with a list of Books.
+type BooksResult {
+    success: Boolean
+    errors: [String]
+    books: [Book]
+}
+
+# This acts as a definition for retrieval of data that returns the Result type that we defined just above this.
+# From a REST perspective, you can think of this section as "GET" definitions.
+# You can also make as many queries as you'd like, but for simplicity, a single result and multiple result were defined.
+type Query {
+    getBooks: BooksResult!
+    getBookById(id: ID!): BookResult!
+}
+
+# This acts as data altering methods. So anything that is not a retrieval of data would be defined here.
+# From a REST perspective, you can think of anything that is not "GET".
+type Mutation {
+    createBook(title: String!, author: String!, isbn: String!): BookResult!
+    updateBookById(id: ID!, title: String!, author: String!, isbn: String!): BookResult!
+    deleteBookById(id: ID!): BookResult!
+}
